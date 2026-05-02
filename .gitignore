@@ -1,0 +1,9 @@
+.idea/
+backend/target/
+frontend/dist/
+frontend/node_modules/
+frontend/vite.log
+frontend/vite.err.log
+
+*.log
+.env
