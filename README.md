@@ -86,7 +86,9 @@ On signup, the backend creates starter categories for the user. All expenses, in
 - Keep `spring.jpa.hibernate.ddl-auto=validate` in production after applying `database/schema.sql`.
 - Configure CORS allowed origins for the production frontend domain.
 
-## GitHub And Deployment
+## Render, Supabase, And Vercel Deployment
+
+Use Render for the Spring Boot backend, Supabase for PostgreSQL, and Vercel for the Vite React frontend.
 
 ### Push To GitHub
 
@@ -98,28 +100,49 @@ git remote add origin https://github.com/YOUR_USERNAME/expense-tracker.git
 git push -u origin main
 ```
 
-### Always-Active Hosting Recommendation
+### Supabase Database
 
-Use Railway Hobby for the backend and MySQL because Railway supports persistent services and MySQL. Use Vercel for the React frontend because it serves the Vite build as a static app.
+Create a Supabase project, open the SQL Editor, and run:
 
-### Railway Backend
-
-Create a Railway project from the GitHub repo and choose the `backend` directory as the service root. Add a MySQL service in the same Railway project.
-
-Set these backend variables in Railway:
-
-```text
-DB_URL=jdbc:mysql://${{MySQL.MYSQLHOST}}:${{MySQL.MYSQLPORT}}/${{MySQL.MYSQLDATABASE}}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-DB_USERNAME=${{MySQL.MYSQLUSER}}
-DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}
-JWT_SECRET=replace-with-a-long-random-secret-at-least-32-characters
-CORS_ALLOWED_ORIGINS=https://your-frontend-domain.vercel.app
+```sql
+-- Paste database/supabase-schema.sql here and run it.
 ```
 
-After deploy, generate a public Railway domain for the backend. Your API base URL will look like:
+Then copy the Session Pooler connection details from Supabase's Connect panel. For Render, use a JDBC URL in this shape:
 
 ```text
-https://your-backend.up.railway.app/api
+jdbc:postgresql://YOUR_POOLER_HOST:5432/postgres?sslmode=require
+```
+
+### Render Backend
+
+Create a new Render Web Service from the GitHub repo.
+
+Use these settings:
+
+```text
+Environment: Docker
+Root Directory: backend
+Dockerfile Path: Dockerfile
+Health Check Path: /api/health
+Instance Type: Starter or higher for always-active service
+```
+
+Set these Render environment variables:
+
+```text
+DB_URL=jdbc:postgresql://YOUR_POOLER_HOST:5432/postgres?sslmode=require
+DB_USERNAME=postgres.YOUR_PROJECT_REF
+DB_PASSWORD=YOUR_SUPABASE_DATABASE_PASSWORD
+DB_POOL_MAX_SIZE=5
+JWT_SECRET=replace-with-a-long-random-secret-at-least-32-characters
+CORS_ALLOWED_ORIGINS=https://your-vercel-app.vercel.app
+```
+
+After deploy, your backend URL will look like:
+
+```text
+https://your-backend.onrender.com/api
 ```
 
 ### Vercel Frontend
@@ -136,7 +159,11 @@ Output Directory: dist
 Set this Vercel environment variable:
 
 ```text
-VITE_API_URL=https://your-backend.up.railway.app/api
+VITE_API_URL=https://your-backend.onrender.com/api
 ```
 
 Redeploy the frontend after setting the variable.
+
+### Always Active Note
+
+Render Free web services spin down after 15 minutes of no inbound traffic. For an always-active backend, use a paid Render instance type such as Starter or higher. Supabase Free projects may also pause after low activity; upgrade Supabase for production-grade availability.
