@@ -12,6 +12,7 @@ spring:
       maximum-pool-size: ${DB_POOL_MAX_SIZE:5}
   jpa:
     hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
       ddl-auto: update
     open-in-view: false
     properties:
