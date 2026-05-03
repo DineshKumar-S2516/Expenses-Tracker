@@ -173,6 +173,8 @@ a {
 .content {
   min-width: 0;
   width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
   padding: 30px;
 }
 
@@ -235,6 +237,8 @@ a {
 .page-stack {
   display: grid;
   gap: 22px;
+  min-width: 0;
+  width: 100%;
   animation: fadeUp 240ms ease;
 }
 
@@ -409,7 +413,7 @@ a {
 
 .split-grid {
   display: grid;
-  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 }
@@ -417,6 +421,8 @@ a {
 .form {
   display: grid;
   gap: 14px;
+  min-width: 0;
+  width: 100%;
 }
 
 .field {
@@ -434,6 +440,7 @@ input,
 select,
 textarea {
   width: 100%;
+  max-width: 100%;
   border: 1px solid rgba(148, 163, 184, 0.2);
   background: #0b1422;
   color: var(--text);
@@ -442,6 +449,7 @@ textarea {
   padding: 10px 12px;
   outline: none;
   transition: 160ms ease;
+  box-sizing: border-box;
 }
 
 textarea {
@@ -850,6 +858,11 @@ td {
   .split-grid {
     grid-template-columns: 1fr;
   }
+
+  .split-grid > * {
+    max-width: 100%;
+    min-width: 0;
+  }
 }
 
 @media (max-width: 780px) {
@@ -944,6 +957,7 @@ td {
 
   .content {
     padding: 16px;
+    overflow-x: hidden;
   }
 
   .content-topline,
@@ -955,6 +969,13 @@ td {
   .category-row {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .module-header h2 {
+    font-size: 17px;
+    line-height: 1.35;
+    overflow-wrap: break-word;
+    word-break: break-word;
   }
 
   .content-topline {
@@ -986,6 +1007,7 @@ td {
 
   .dashboard-grid,
   .split-grid {
+    grid-template-columns: 1fr;
     gap: 16px;
   }
 
@@ -993,6 +1015,8 @@ td {
   .progress-card,
   .stat-card {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .highlight-panel {
@@ -1108,6 +1132,8 @@ td {
   .progress-card,
   .stat-card {
     padding: 14px;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .panel-heading {
@@ -1127,6 +1153,7 @@ td {
   textarea {
     min-height: 46px;
     font-size: 16px;
+    max-width: 100%;
   }
 
   textarea {
@@ -1140,6 +1167,11 @@ td {
 
   .button-row > button {
     width: 100%;
+  }
+
+  .inline-fields,
+  .filter-grid {
+    grid-template-columns: 1fr;
   }
 
   table {
