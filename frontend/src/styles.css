@@ -21,10 +21,22 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background:
     radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 30%),
     linear-gradient(135deg, #07111f 0%, #0b1220 48%, #101827 100%);
@@ -48,6 +60,7 @@ a {
 .app-shell {
   display: grid;
   grid-template-columns: 290px minmax(0, 1fr);
+  width: 100%;
   min-height: 100vh;
 }
 
@@ -159,6 +172,7 @@ a {
 
 .content {
   min-width: 0;
+  width: 100%;
   padding: 30px;
 }
 
@@ -840,25 +854,96 @@ td {
 
 @media (max-width: 780px) {
   .app-shell {
-    grid-template-columns: 1fr;
+    display: block;
+    min-height: 100svh;
   }
 
   .sidebar {
-    position: static;
+    position: sticky;
+    top: 0;
+    z-index: 30;
     height: auto;
-    padding: 16px;
+    width: 100%;
+    padding: 12px 14px 10px;
+    gap: 12px;
+    border-right: 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(8, 16, 29, 0.96);
+    backdrop-filter: blur(18px);
+  }
+
+  .brand {
+    gap: 10px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand small,
+  .user-chip small {
+    max-width: 150px;
   }
 
   .nav-list {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex;
+    gap: 8px;
+    margin-inline: -14px;
+    padding: 0 14px 3px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .nav-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    flex: 0 0 auto;
+    width: auto;
+    min-height: 38px;
+    padding: 8px 11px;
+    border-color: rgba(148, 163, 184, 0.12);
+    background: rgba(255, 255, 255, 0.035);
+    white-space: nowrap;
+  }
+
+  .nav-link svg {
+    flex: 0 0 auto;
   }
 
   .sidebar-footer {
     margin-top: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .user-chip {
+    min-width: 0;
+    padding: 8px 10px;
+  }
+
+  .user-chip > span {
+    width: 30px;
+    height: 30px;
+  }
+
+  .logout-button {
+    margin-top: 0;
+    width: auto;
+    min-width: 42px;
+  }
+
+  .logout-button span {
+    display: none;
   }
 
   .content {
-    padding: 18px;
+    padding: 16px;
   }
 
   .content-topline,
@@ -872,11 +957,54 @@ td {
     flex-direction: column;
   }
 
+  .content-topline {
+    margin-bottom: 18px;
+  }
+
+  .content h1 {
+    font-size: 25px;
+  }
+
+  .content h2 {
+    font-size: 19px;
+  }
+
+  .module-header {
+    gap: 10px;
+  }
+
+  .page-stack {
+    gap: 16px;
+  }
+
   .stats-grid,
   .card-grid,
   .inline-fields,
   .filter-grid {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid,
+  .split-grid {
+    gap: 16px;
+  }
+
+  .panel,
+  .progress-card,
+  .stat-card {
+    width: 100%;
+  }
+
+  .highlight-panel {
+    min-height: 210px;
+  }
+
+  .chart-panel {
+    min-height: 360px;
+  }
+
+  .ring-chart {
+    height: 240px;
   }
 
   .timeline-item {
@@ -894,12 +1022,82 @@ td {
 }
 
 @media (max-width: 520px) {
+  .sidebar {
+    padding: 10px 12px 9px;
+  }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .brand strong {
+    font-size: 14px;
+  }
+
+  .brand small {
+    font-size: 11px;
+  }
+
   .nav-list {
-    grid-template-columns: 1fr;
+    margin-inline: -12px;
+    padding-inline: 12px;
+  }
+
+  .nav-link {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .nav-link svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .sidebar-footer {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .user-chip strong {
+    font-size: 13px;
+  }
+
+  .user-chip small {
+    max-width: 180px;
+    font-size: 11px;
+  }
+
+  .content {
+    padding: 14px;
+  }
+
+  .content-topline {
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
   .content h1 {
-    font-size: 24px;
+    font-size: 22px;
+  }
+
+  .content h2 {
+    font-size: 18px;
+  }
+
+  .content h3 {
+    font-size: 16px;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  .topline-metric {
+    min-height: 36px;
+    padding: 8px 10px;
+    font-size: 13px;
   }
 
   .auth-copy h1 {
@@ -909,7 +1107,30 @@ td {
   .panel,
   .progress-card,
   .stat-card {
-    padding: 16px;
+    padding: 14px;
+  }
+
+  .panel-heading {
+    gap: 8px;
+  }
+
+  .stat-card {
+    min-height: 118px;
+  }
+
+  .stat-card strong {
+    font-size: 22px;
+  }
+
+  input,
+  select,
+  textarea {
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  textarea {
+    min-height: 86px;
   }
 
   .button-row {
@@ -919,5 +1140,27 @@ td {
 
   .button-row > button {
     width: 100%;
+  }
+
+  table {
+    min-width: 640px;
+  }
+
+  th,
+  td {
+    padding: 12px 10px;
+  }
+
+  .transaction-row,
+  .bill-item,
+  .category-row,
+  .timeline-item {
+    padding: 12px;
+  }
+
+  .toast-stack {
+    right: 12px;
+    bottom: 12px;
+    width: calc(100vw - 24px);
   }
 }
